@@ -30,7 +30,11 @@
           @else
               @include('incs.header')
           @endif
-          
+
+          <div class="container">
+            @include('incs.messages')
+          </div>
+
           @yield('content')
         </div>
     </div>
