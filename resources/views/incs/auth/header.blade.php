@@ -1,3 +1,7 @@
+@php
+use App\CourseUser;
+$courseUser = CourseUser::where('user_id', Auth::user()->id)->get(); 
+@endphp
 <nav class="mainmenu mobile-menu">
     <ul>
         <li class="active">
@@ -12,11 +16,14 @@
                 Suivre un cours
             </a>
             <ul class="dropdown px-2 py-3">
+                @foreach (\App\Category::all() as $category)
                 <li>
-                    <a href="#">
-                    Catégorie
+                    <a href="{{ route('courses.filter', $category->id) }}">
+                        {!! $category->icon !!}
+                        {{ $category->name }}
                     </a>
                 </li>
+                @endforeach
             </ul>
         </li>
         <li>
@@ -31,54 +38,87 @@
             </ul>
         </li>
         <li>
-            <a href="#">
+            <a href="{{ route('participant.index') }}">
                 <i class="fas fa-book"></i>
                 Mes cours
             </a>
             <ul class="dropdown">
+                @foreach ($courseUser as $item)
                 <li>
                     <div class="d-flex  ml-2 my-3">
-                        <img class="avatar border-rounded" src="https://blog.hyperiondev.com/wp-content/uploads/2019/02/Blog-Types-of-Web-Dev.jpg"/>
+                        <img class="avatar border-rounded" src="/storage/courses/{{ $item->course->user_id }}/{{ $item->course->image }}">
                         <div class="user-infos">
-                            <a href="#"><small>Titre du cours</small></a>
+                            <a href="#"><small>{{ $item->course->title }}</small></a>
                         </div>
                     </div>
                 </li>
+                @endforeach
             </ul>
         </li>
         <li>
-            <a href="#">
+            <a href="{{ route('cart.index') }}">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="badge badge-pill badge-danger">1</span>
+                @if (count(\Cart::session(Auth::user()->id)->getContent()) > 0)
+                <span class="badge badge-pill badge-danger">{{ count(\Cart::session(Auth::user()->id)->getContent())}}</span>
+                @endif
             </a>
+
+            @if (count(\Cart::session(Auth::user()->id)->getContent()) > 0)
+            <ul class="dropdown px-2 py-2">
+                @foreach (\Cart::session(Auth::user()->id)->getContent() as $cartItem)
+                <li>
+                    <div class="d-flex">
+                        <img class="avatar border-rounded" src="/storage/courses/{{ $cartItem->model->user_id }}/{{$cartItem->model->image}}"/>
+                        <div class="user-infos ml-3">
+                            <small>{{$cartItem->model->title}}</small>
+                            <p class="text-danger">{{$cartItem->price}} €</p>
+                        </div>
+                    </div>
+                </li>
+                @endforeach
+            </ul>
+            @else 
+            <ul class="dropdown px-2 py-2 text-center">
+                <li>
+                    <div class="empty-cart">
+                        <p>Votre panier est vide</p>
+                        <a href="{{ route('courses.index') }}" class="btn btn-link">Continuer vos achats</a>
+                    </div>
+                </li>
+            </ul>
+            @endif
+        </li>
+        <li>
+            <a href="{{ route('cart.index') }}'">
+                <i class="fas fa-heart"></i>
+                @if (count(\Cart::session(Auth::user()->id.'_wishlist')->getContent()) > 0)
+                <span class="badge badge-pill badge-danger">1</span>
+                @endif
+            </a>
+            @if (count(\Cart::session(Auth::user()->id.'_wishlist')->getContent()) > 0)
+            <ul class="dropdown px-2 py-2"> 
+                @foreach (\Cart::session(Auth::user()->id.'_wishlist')->getContent() as $wishItem)
+                <li>
+                    <div class="d-flex">
+                        <img class="avatar border-rounded" src="/storage/courses/{{$wishItem->model->user_id}}/{{$wishItem->model->image}} ">
+                        <div class="user-infos ml-3">
+                            <small>{{$wishItem->model->title}}</small>
+                            <p class="text-danger">{{$wishItem->price}} €</p>
+                        </div>
+                    </div>
+                </li>
+                @endforeach
+            </ul>
+            @else
             <ul class="dropdown px-2 py-2">
                 <li>
-                    <div class="d-flex">
-                        <img class="avatar border-rounded" src="https://blog.hyperiondev.com/wp-content/uploads/2019/02/Blog-Types-of-Web-Dev.jpg"/>
-                        <div class="user-infos ml-3">
-                            <small>Titre du cours</small>
-                            <p class="text-danger">29,99 €</p>
-                        </div>
+                    <div class="empty-cart">
+                        <p>Votre list de souhaits est vide</p>
+                        <a href="{{ route('courses.index') }}" class="btn btn-link">En ajouter</a>
                     </div>
                 </li>
             </ul>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fas fa-heart"></i>
-                <span class="badge badge-pill badge-danger">1</span>
-            </a>
-            <ul class="dropdown px-2 py-2"> 
-                <li>
-                    <div class="d-flex">
-                        <img class="avatar border-rounded" src="https://blog.hyperiondev.com/wp-content/uploads/2019/02/Blog-Types-of-Web-Dev.jpg"/>
-                        <div class="user-infos ml-3">
-                            <small>Titre du cours</small>
-                            <p class="text-danger">19,99 €</p>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+            @endif
         </li>
         <li>
             <a class="nav-link" href="#">

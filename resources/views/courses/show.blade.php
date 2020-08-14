@@ -49,7 +49,7 @@
                                     <div class="pi-price mt-5">
                                         <h2><span>€</span>{{ $course->price }}</h2>
                                     </div>
-                                    <a href="#" class="price-btn">M'inscrire <i class="fas fa-arrow-right"></i></a>
+                                    <a href="{{ route('cart.store', $course->id) }}" class="price-btn">M'inscrire <i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                 <div class="blog-item set-bg" data-setbg="/storage/courses/{{$recommendation->user_id}}/{{$recommendation->image}}">
                     <div class="bi-tag bg-gradient">{{$recommendation->category->name}}</div>
                     <div class="bi-text">
-                        <h5><a href="#">{{ $recommendation->title }}</a></h5>
+                        <h5><a href="{{ route('courses.show', $recommendation->slug) }}">{{ $recommendation->title }}</a></h5>
                         <span><i class="fa fa-clock-o"></i> {{$recommendation->created_at}}</span>
                     </div>
                 </div>

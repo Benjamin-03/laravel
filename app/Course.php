@@ -20,4 +20,9 @@ class Course extends Model
     {
         return $this->hasMany('App\Section');
     }
+
+    public function participants()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }

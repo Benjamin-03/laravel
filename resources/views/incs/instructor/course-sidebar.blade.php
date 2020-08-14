@@ -10,17 +10,17 @@
                 <a href="{{ route('instructor.curriculum.index', $course->id) }}">Programme</a>
             </li>
             <li>
-                <a href="#">Page d'accueil du cours</a>
+                <a href="{{ route('instructor.edit', $course->id) }}">Page d'accueil du cours</a>
             </li>
         </ul>
         
         <h4 class="btn text-white pl-0">Gestion du cours</h4>
         <ul class="list-unstyled components mb-5">
             <li>
-                <a href="{{ route('pricing.index', $course->id)}}">Tarification</a>
+                <a href="{{ route('pricing.index', $course->id) }}">Tarification</a>
             </li>
             <li>
-            <a href="#">Participants</a>
+                <a href="{{ route('instructor.participants', $course->id) }}">Participants</a>
             </li>
             <li>
                 <a href="{{ route('instructor.destroy', $course->id) }}" class="btn btn-danger text-center px-3">
@@ -31,8 +31,7 @@
         </ul>
         <div class="d-flex justify-content-around">
             <a class="primary-btn" href="{{ route('instructor.publish', $course->id) }}">
-                <i class="fas fa-check"></i>
-                Mettre en ligne
+                <i class="fas fa-check"></i> Mettre en ligne
             </a>
         </div>
     </div>
